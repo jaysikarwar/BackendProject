@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zero Downtime Deployment Demo</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 60px;
+    }
+    h1 {
+      color: #333;
+    }
+    #status {
+      font-size: 26px;
+      margin-top: 20px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Zero-Downtime Deployment Demo</h1>
+  <p>Frontend polling backend every 1 second</p>
+
+  <div id="status">Connecting...</div>
+
+  <script>
+  let lastVersion = "none";
+
+  async function checkBackend() {
+    try {
+      let res = await fetch("http://localhost:3001/version");
+      let data = await res.json();
+      lastVersion = data.version;
+      document.getElementById("status").innerText =
+        "Connected to backend version: " + data.version;
+    } catch {
+      try {
+        let res = await fetch("http://localhost:3002/version");
+        let data = await res.json();
+        lastVersion = data.version;
+        document.getElementById("status").innerText =
+          "Connected to backend version: " + data.version;
+      } catch {
+        document.getElementById("status").innerText =
+          "Switching backend... (no downtime)";
+      }
+    }
+  }
+
+  setInterval(checkBackend, 1000);
+</script>
+
+
+
+</body>
+</html>
