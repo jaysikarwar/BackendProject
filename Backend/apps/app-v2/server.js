@@ -27,6 +27,13 @@ const shutdown = (signal) => {
 process.on("SIGTERM", shutdown);
 process.on("SIGINT", shutdown);
 
+// app.get("/version", (req, res) => {
+//   res.json({ version: "v2" });
+// });
 app.get("/version", (req, res) => {
-  res.json({ version: "v2" });
+  res.json({
+    version: "v2",
+    status: "active"
+  });
 });
+
